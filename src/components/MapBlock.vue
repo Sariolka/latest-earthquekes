@@ -1,31 +1,32 @@
 <script setup lang="ts">
 import TileLayer from 'ol/layer/Tile'
-import { OGCMapTile, OGCVectorTile, OSM, XYZ } from 'ol/source'
+import { OGCMapTile } from 'ol/source'
 import { Feature, View } from 'ol'
 import Map from 'ol/Map.js'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useGeographic } from 'ol/proj'
 import { Point } from 'ol/geom'
 import { Style } from 'ol/style'
 import VectorSource from 'ol/source/Vector'
 import VectorLayer from 'ol/layer/Vector'
-import { GeoJSON, MVT } from 'ol/format'
-import VectorTileLayer from 'ol/layer/VectorTile'
+import { useEarthquakesStore } from '@/stores/earthquakesstore.ts'
 
-const mapContainer = ref()
+const store = useEarthquakesStore()
 
-const place = [-151.0385, 61.3746]
+const renderedData = computed(() => {
+  return store.significant_month.map(earthquake => {
+    return new Feature({
+      geometry: new Point(earthquake.coordinates),
+      id: earthquake.id,
+      place: earthquake.place,
+      magnitude: earthquake.magnitude,
+    });
+  });
+});
 
-const point = new Feature({
-  geometry: new Point(place),
-})
-
-const vectorSource = new VectorSource({
-  features: [point],
-})
-
+const vectorSource = ref(new VectorSource());
 const vectorLayer = new VectorLayer({
-  source: vectorSource,
+  source: vectorSource.value,
   style: {
     'circle-radius': 7,
     'circle-fill-color': 'red',
@@ -54,10 +55,13 @@ onMounted(() => {
   })
 
   map.on('pointermove', function (event) {
-    const type = map.hasFeatureAtPixel(event.pixel) ? 'pointer' : 'inherit'
-    map.getViewport().style.cursor = type
+    map.getViewport().style.cursor = map.hasFeatureAtPixel(event.pixel) ? 'pointer' : 'inherit'
   })
 })
+watch(renderedData, (newFeatures) => {
+  vectorSource.value.clear();
+  vectorSource.value.addFeatures(newFeatures);
+}, { immediate: true });
 </script>
 
 <template>
@@ -71,5 +75,6 @@ onMounted(() => {
   bottom: 0;
   left: 300px;
   width: calc(100% - 300px);
+  background-color: #04041b;
 }
 </style>
