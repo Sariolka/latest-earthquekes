@@ -12,6 +12,9 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
   ],
+  optimizeDeps: {
+    include: ['ol'],
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

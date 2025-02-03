@@ -59,14 +59,13 @@
 // ]
 // }
 
-
 export interface Earthquake {
-  id: string
-  place: string
-  time: number
-  magnitude: number
-  coordinates: number[]
-  tsunami: number | null
-  title: string
-  hypocenter: number
+  id: string;
+  place: string;
+  time: number;
+  magnitude: number;
+  coordinates: number[];
+  tsunami: number;
+  title: string;
+  hypocenter: number;
 }

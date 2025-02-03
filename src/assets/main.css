@@ -1,5 +1,7 @@
-@import "@/components/fonts/fonts.css";
+@import './normalize.css';
+@import '@/components/fonts/fonts.css';
 @import './base.css';
+@import '../scss/styles.scss';
 
 #app {
   margin: 0 auto;

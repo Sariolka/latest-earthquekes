@@ -1,13 +1,13 @@
 <script setup lang="ts">
 defineProps<{
-  msg: string
-}>()
+  msg: string;
+}>();
 const fetchEarthquakeData = async () => {
   const res = await fetch(
-    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson',
-  )
-  console.log(res)
-}
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson'
+  );
+  console.log(res);
+};
 </script>
 
 <template>

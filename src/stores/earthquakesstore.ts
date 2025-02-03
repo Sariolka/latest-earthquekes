@@ -1,6 +1,8 @@
-import { defineStore } from 'pinia'
-import type { Earthquake } from '@/components/types/types.ts'
-import { fetchEarthquakes } from '@/components/api/api.ts'
+import { defineStore } from 'pinia';
+import type { Earthquake } from '@/components/types/types.ts';
+import { fetchEarthquakes } from '@/components/api/api.ts';
+
+const CACHE_TIME = 120;
 
 export const useEarthquakesStoreI = defineStore('earthquake', {
   state: () => ({
@@ -10,7 +12,7 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
     on_loaded: [],
 
     significant_month: [] as Earthquake[],
-    received_at: null,
+    received_at: null
   }),
   actions: {
     pushToLocalStorage() {
@@ -19,8 +21,8 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
           'earthquake',
           JSON.stringify({
             significant_month: this.significant_month,
-            received_at: this.received_at,
-          }),
+            received_at: this.received_at
+          })
         );
       } catch (e) {
         console.error(e);
@@ -39,9 +41,11 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
       let data;
 
       try {
+        data = this.pullFromLocalStorage();
+        if (!data?.received_at || data.received_at + CACHE_TIME < Date.now()) {
           data = await fetchEarthquakes();
           data.received_at = Date.now();
-          //оставить - нет?
+        }
       } catch (e) {
         console.error(e);
         this.loadFinished(false);
@@ -55,10 +59,9 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
           magnitude: item.properties.mag,
           coordinates: item.geometry.coordinates.slice(0, 2),
           tsunami: item.properties.tsunami,
-          hypocenter: item.geometry.coordinates[2],
-        } as Earthquake
+          hypocenter: item.geometry.coordinates[2]
+        } as Earthquake;
       });
-      console.log('98',this.significant_month)
       this.pushToLocalStorage();
       this.loadFinished(true);
     },
@@ -76,13 +79,13 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
       for (const callback of this.on_loaded) {
         callback(success);
       }
-    },
-  },
-})
+    }
+  }
+});
 
-export const useEarthquakesStore= () => {
+export const useEarthquakesStore = () => {
   const store = useEarthquakesStoreI();
-  store.fetchData().then(() => console.log("Загрузка данных с сервера завершена"));
+  store.fetchData().then(() => console.log('Загрузка данных с сервера завершена'));
   console.log('1', store);
   return store;
 };

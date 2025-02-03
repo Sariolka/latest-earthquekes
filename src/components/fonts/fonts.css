@@ -4,8 +4,10 @@
   font-style: normal;
   font-weight: 300;
   font-display: swap;
-  src: local('Raleway-Light'), url('../fonts/Raleway-Light.woff2') format('woff2'),
-url('../fonts/Raleway-Light.woff') format('woff');
+  src:
+    local('Raleway-Light'),
+    url('../fonts/Raleway-Light.woff2') format('woff2'),
+    url('../fonts/Raleway-Light.woff') format('woff');
 }
 
 /* Raleway 500  */
@@ -14,8 +16,10 @@ url('../fonts/Raleway-Light.woff') format('woff');
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: local('Raleway-Medium'), url('../fonts/Raleway-Medium.woff2') format('woff2'),
-url('../fonts/Raleway-Medium.woff') format('woff');
+  src:
+    local('Raleway-Medium'),
+    url('../fonts/Raleway-Medium.woff2') format('woff2'),
+    url('../fonts/Raleway-Medium.woff') format('woff');
 }
 
 /* Raleway 600  */
@@ -24,8 +28,10 @@ url('../fonts/Raleway-Medium.woff') format('woff');
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: local('Raleway-SemiBold'), url('../fonts/Raleway-SemiBold.woff2') format('woff2'),
-url('../fonts/Raleway-SemiBold.woff') format('woff');
+  src:
+    local('Raleway-SemiBold'),
+    url('../fonts/Raleway-SemiBold.woff2') format('woff2'),
+    url('../fonts/Raleway-SemiBold.woff') format('woff');
 }
 
 /* Raleway 900  */
@@ -34,8 +40,11 @@ url('../fonts/Raleway-SemiBold.woff') format('woff');
   font-style: normal;
   font-weight: 900;
   font-display: swap;
-  src: local('Raleway-Black'), local('Raleway-Black'), url('../fonts/Raleway-Black.woff2') format('woff2'),
-url('../fonts/Raleway-Black.woff') format('woff');
+  src:
+    local('Raleway-Black'),
+    local('Raleway-Black'),
+    url('../fonts/Raleway-Black.woff2') format('woff2'),
+    url('../fonts/Raleway-Black.woff') format('woff');
 }
 
 /* Rational 400 */
@@ -44,7 +53,9 @@ url('../fonts/Raleway-Black.woff') format('woff');
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: local('Rationale-Regular'), url('../fonts/Rationale-Regular.woff2') format('woff2');
+  src:
+    local('Rationale-Regular'),
+    url('../fonts/Rationale-Regular.woff2') format('woff2');
 }
 
 /* PTSans 700  */
@@ -53,7 +64,9 @@ url('../fonts/Raleway-Black.woff') format('woff');
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: local(PTsans-Bold), url('../fonts/PTSans-Bold.ttf') format('truetype');
+  src:
+    local(PTsans-Bold),
+    url('../fonts/PTSans-Bold.ttf') format('truetype');
 }
 
 /* Montserrat 400 */
@@ -62,9 +75,10 @@ url('../fonts/Raleway-Black.woff') format('woff');
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: local('Montserrat-Regular'), 
-url('../fonts/Montserrat-Regular.woff2') format('woff2'), 
-url('../fonts/Montserrat-Regular.woff') format('woff');
+  src:
+    local('Montserrat-Regular'),
+    url('../fonts/Montserrat-Regular.woff2') format('woff2'),
+    url('../fonts/Montserrat-Regular.woff') format('woff');
 }
 
 /* Montserrat 500 */
@@ -73,9 +87,10 @@ url('../fonts/Montserrat-Regular.woff') format('woff');
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: local('Montserrat-Medium'), 
-url('../fonts/Montserrat-Medium.woff2') format('woff2'), 
-url('../fonts/Montserrat-Medium.woff') format('woff');
+  src:
+    local('Montserrat-Medium'),
+    url('../fonts/Montserrat-Medium.woff2') format('woff2'),
+    url('../fonts/Montserrat-Medium.woff') format('woff');
 }
 
 /* Montserrat 600 */
@@ -84,9 +99,10 @@ url('../fonts/Montserrat-Medium.woff') format('woff');
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: local('Montserrat-SemiBold'), 
-url('../fonts/Montserrat-SemiBold.woff2') format('woff2'), 
-url('../fonts/Montserrat-SemiBold.woff') format('woff');
+  src:
+    local('Montserrat-SemiBold'),
+    url('../fonts/Montserrat-SemiBold.woff2') format('woff2'),
+    url('../fonts/Montserrat-SemiBold.woff') format('woff');
 }
 
 /* Montserrat 700 */
@@ -95,7 +111,8 @@ url('../fonts/Montserrat-SemiBold.woff') format('woff');
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: local('Montserrat-Bold'), 
-url('../fonts/Montserrat-Bold.woff2') format('woff2'), 
-url('../fonts/Montserrat-Bold.woff') format('woff');
+  src:
+    local('Montserrat-Bold'),
+    url('../fonts/Montserrat-Bold.woff2') format('woff2'),
+    url('../fonts/Montserrat-Bold.woff') format('woff');
 }
