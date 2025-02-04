@@ -19,20 +19,29 @@ import CircleStyle from 'ol/style/Circle';
 const store = useEarthquakesStore();
 
 const currentEarthquake = ref<Earthquake | null>(null);
+const currentEarthquakeId = ref<string | null>(null);
 
 const renderedData = computed(() => {
-  return store.significant_month.map((earthquake) => {
+  return store.earthquakes_array.map((earthquake) => {
     return new Feature({
       geometry: new Point(earthquake.coordinates),
       earthquake: earthquake
     });
   });
 });
+
+const selectedFeature = computed(() => {
+  if (!currentEarthquakeId.value) return null;
+  return vectorSource.value
+    .getFeatures()
+    .find((feature) => feature.get('earthquake').id === currentEarthquakeId.value);
+});
+
 const styleCache = {};
 const styleFunction = function (feature) {
   const earthquake = feature.get('earthquake');
   const magnitude = earthquake.magnitude;
-  const radius = 3 + (magnitude - 1);
+  const radius = 3 + 1.5 * (magnitude - 1);
   let style = styleCache[radius];
   if (!style) {
     style = new Style({
@@ -51,6 +60,7 @@ const styleFunction = function (feature) {
   }
   return style;
 };
+
 const vectorSource = ref(new VectorSource());
 const vectorLayer = new VectorLayer({
   source: vectorSource.value,
@@ -84,6 +94,7 @@ onMounted(() => {
     positioning: 'bottom-center',
     offset: [0, -4]
   });
+
   map.addOverlay(overlay);
 
   map.on('click', function (evt) {
@@ -94,7 +105,13 @@ onMounted(() => {
       return;
     }
     overlay.setPosition(evt.coordinate);
+    console.log(evt.coordinate, Array.from(feature.get('earthquake').coordinates));
     currentEarthquake.value = feature.get('earthquake');
+    if (currentEarthquake.value) {
+      currentEarthquakeId.value = currentEarthquake.value.id;
+      store.setCurrentEarthquake(currentEarthquake.value.id);
+      console.log(store.current_earthquake);
+    }
     popup.style.display = 'block';
   });
 
@@ -112,12 +129,56 @@ watch(
   { immediate: true }
 );
 
+watch(
+  () => currentEarthquakeId.value,
+  (newValue, oldValue) => {
+    // const popup = document.getElementById('popup');
+    // const overlay = new Overlay({
+    //   element: popup,
+    //   positioning: 'bottom-center',
+    //   offset: [0, -4]
+    // });
+    // const coordinates = store.earthquakes_array.map((earthquake) => {
+    //   if(earthquake.id === newValue) {
+    //     return earthquake.coordinates
+    //   }
+    // })
+    // overlay.setPosition(coordinates);
+    // popup.style.display = 'block';
+    updateStyle();
+  }
+);
+
+const highlightStyle = function (feature: Feature) {
+  const earthquake = feature.get('earthquake');
+  const magnitude = earthquake.magnitude;
+  const radius = 3 + 1.5 * (magnitude - 1);
+
+  return new Style({
+    image: new CircleStyle({
+      radius: radius + 1,
+      fill: new Fill({
+        color: '#3949ab'
+      })
+    })
+  });
+};
+
+function updateStyle() {
+  vectorSource.value.getFeatures().forEach((feature) => {
+    feature.setStyle(
+      feature === selectedFeature.value ? highlightStyle(feature) : styleFunction(feature)
+    );
+  });
+}
+
 const calculatedTime = computed(() => {
   if (currentEarthquake.value) {
     return formatDate(currentEarthquake.value.time);
   }
   return 0;
 });
+
 const calculatedCoordinates = computed(() => {
   if (currentEarthquake.value) {
     return formatCoordinates(currentEarthquake.value.coordinates);
@@ -130,6 +191,10 @@ const calculatedDepth = computed(() => {
     return formatDepth(currentEarthquake.value.hypocenter);
   }
   return 0;
+});
+
+const calculatedMag = computed(() => {
+  return Math.round(currentEarthquake.value.magnitude * 10) / 10;
 });
 
 const closePopup = () => {
@@ -184,7 +249,7 @@ const closePopup = () => {
             <div class="map__popup-table-body">
               <p class="map__popup-tr">
                 <span class="map__popup-th map__popup-magnitude">{{
-                  currentEarthquake && currentEarthquake.magnitude
+                  currentEarthquake && calculatedMag
                 }}</span>
                 <span class="map__popup-th map__popup-hypocenter"
                   >{{ currentEarthquake && calculatedDepth }}&nbsp;km</span
@@ -204,7 +269,7 @@ const closePopup = () => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 #map {
   position: absolute;
   top: 0;
@@ -213,116 +278,116 @@ const closePopup = () => {
   width: calc(100% - 300px);
   background-color: #04041b;
 }
+.map {
+  &__popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+  &__popup {
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 7px;
+    position: relative;
+    width: 270px;
+    cursor: default;
+  }
 
-.map__popup-header {
-  display: flex;
-  align-items: center;
-  justify-content: end;
-}
-.map__popup {
-  background-color: #fff;
-  border-radius: 4px;
-  padding: 7px;
-  position: relative;
-  width: 270px;
-  cursor: default;
-}
+  &__content {
+    padding-left: 5px;
+    padding-right: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-.map__content {
-  padding-left: 5px;
-  padding-right: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  &__close-btn {
+    background-image: url('@/components/icons/close.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+  &__popup-title {
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: normal;
+    max-width: 220px;
+  }
 
-.map__close-btn {
-  background-image: url('@/components/icons/close.svg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: transparent;
-  border: none;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-.map__popup-title {
-  font-family: 'Montserrat', sans-serif;
-  margin-bottom: 0;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: normal;
-  max-width: 220px;
-}
+  &__icon {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 18px;
+    height: 18px;
+  }
 
-.map__icon {
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  width: 18px;
-  height: 18px;
-}
+  &__icon-tsunami {
+    background-image: url('@/components/icons/tsunami.svg');
+  }
 
-.map__icon-tsunami {
-  background-image: url('@/components/icons/tsunami.svg');
-}
+  &__icon-magnitude {
+    background-image: url('@/components/icons/activity.svg');
+  }
 
-.map__icon-magnitude {
-  background-image: url('@/components/icons/activity.svg');
-}
+  &__icon-hypocenter {
+    background-image: url('@/components/icons/depth.svg');
+  }
 
-.map__icon-hypocenter {
-  background-image: url('@/components/icons/depth.svg');
-}
+  &__icon-earth {
+    background-image: url('@/components/icons/globe.svg');
+  }
 
-.map__icon-earth {
-  background-image: url('@/components/icons/globe.svg');
-}
+  &__popup-date {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: left;
+    color: #2c3e50;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
 
-.map__popup-date {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 16px;
-  text-align: left;
-  color: #2c3e50;
-  font-style: italic;
-  margin-bottom: 20px;
-}
+  &__popup-table {
+    display: table;
+    width: auto;
+  }
 
-.map__popup-table {
-  display: table;
-  width: auto;
-}
+  &__popup-table-header {
+    display: table-header-group;
+  }
 
-.map__popup-table-header {
-  display: table-header-group;
-}
+  &__popup-tr {
+    display: table-row;
+    margin-bottom: 0;
+  }
 
-.map__popup-tr {
-  display: table-row;
-  margin-bottom: 0;
-}
+  &__popup-table-body {
+    display: table-row-group;
+  }
 
-.map__popup-table-body {
-  display: table-row-group;
-}
+  &__popup-th {
+    display: table-cell;
+    padding: 4px 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: normal;
+    text-align: end;
+  }
 
-.map__popup-th {
-  display: table-cell;
-  padding: 4px 10px;
-  text-align: left;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: normal;
+  &__popup-head {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
 }
-
-.map__popup-head {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-}
-
 </style>
