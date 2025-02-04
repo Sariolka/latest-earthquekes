@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import type { Earthquake } from '@/components/types/types.ts';
 import MagnitudeItem from '@/components/details/MagnitudeItem.vue';
 import { formatDate } from '@/components/helpers/dateFormatter.ts';
@@ -7,6 +7,7 @@ import { formatDepth } from '@/components/helpers/depthFormatter.ts';
 
 const props = defineProps<{
   earthquake: Earthquake;
+  isActive: boolean;
 }>();
 
 const calculatedMag = computed(() => {
@@ -23,7 +24,7 @@ const calculatedTime = computed(() => {
 </script>
 
 <template>
-  <li class="event-item">
+  <li class="event-item" :class="{ 'event-item_active': isActive }" @click="$emit('click')">
     <div class="event-item__top">
       <MagnitudeItem :magnitude="calculatedMag" />
       <h3 class="event-item__title">{{ earthquake.place }}</h3>
@@ -46,11 +47,23 @@ const calculatedTime = computed(() => {
   gap: 10px;
   list-style: none;
   width: 100%;
+  border-radius: 0;
+
+  &_active {
+    background: #e9f1f8;
+    cursor: default;
+    pointer-events: none;
+  }
+  &:first-child {
+    border-radius: 4px 4px 0 0;
+  }
 
   &:last-child {
     border: none;
+    border-radius: 0 0 4px 4px;
     padding-bottom: 1px;
   }
+
   &:hover {
     background-color: #f1f8ff;
     cursor: pointer;
@@ -78,6 +91,7 @@ const calculatedTime = computed(() => {
     text-overflow: ellipsis;
     flex-grow: 1;
     margin-bottom: 0;
+    line-height: normal;
   }
 
   &__hypocenter {
@@ -85,6 +99,7 @@ const calculatedTime = computed(() => {
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     font-weight: 600;
+    line-height: normal;
     white-space: nowrap;
   }
 

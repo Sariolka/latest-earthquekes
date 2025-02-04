@@ -11,8 +11,9 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
     is_failed: false,
     on_loaded: [],
 
-    significant_month: [] as Earthquake[],
-    received_at: null
+    earthquakes_array: [] as Earthquake[],
+    received_at: null,
+    current_earthquake: ''
   }),
   actions: {
     pushToLocalStorage() {
@@ -20,7 +21,7 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
         sessionStorage.setItem(
           'earthquake',
           JSON.stringify({
-            significant_month: this.significant_month,
+            earthquakes_array: this.earthquakes_array,
             received_at: this.received_at
           })
         );
@@ -36,14 +37,17 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
       }
       return null;
     },
-    async fetchData() {
+    setCurrentEarthquake(id: string) {
+      this.current_earthquake = id;
+    },
+    async fetchData(period: string, magnitude: string) {
       this.loadStart();
       let data;
 
       try {
         data = this.pullFromLocalStorage();
         if (!data?.received_at || data.received_at + CACHE_TIME < Date.now()) {
-          data = await fetchEarthquakes();
+          data = await fetchEarthquakes(period, magnitude);
           data.received_at = Date.now();
         }
       } catch (e) {
@@ -51,7 +55,7 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
         this.loadFinished(false);
         return;
       }
-      this.significant_month = data.features.map((item) => {
+      this.earthquakes_array = data.features.map((item) => {
         return {
           id: item.id,
           place: item.properties.place,
@@ -80,12 +84,21 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
         callback(success);
       }
     }
+  },
+  getters: {
+    isNeedLoading: (state) => () => {
+      return !state.is_loading && !state.is_loaded;
+    }
   }
 });
 
 export const useEarthquakesStore = () => {
   const store = useEarthquakesStoreI();
-  store.fetchData().then(() => console.log('Загрузка данных с сервера завершена'));
-  console.log('1', store);
+  if (store.isNeedLoading()) {
+    store
+      .fetchData('month', 'significant')
+      .then(() => console.log('Загрузка данных с сервера завершена'));
+    console.log('1', store);
+  }
   return store;
 };
