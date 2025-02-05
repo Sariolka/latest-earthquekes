@@ -31,7 +31,7 @@ const renderedData = computed(() => {
 });
 
 const selectedFeature = computed(() => {
-  if (!currentEarthquakeId.value) return null;
+  if (!currentEarthquakeId.value || currentEarthquakeId.value === null) return null;
   return vectorSource.value
     .getFeatures()
     .find((feature) => feature.get('earthquake').id === currentEarthquakeId.value);
@@ -127,7 +127,7 @@ onMounted(() => {
     if (currentEarthquake.value) {
       currentEarthquakeId.value = currentEarthquake.value.id;
       store.setCurrentEarthquake(currentEarthquake.value.id);
-      console.log(store.current_earthquake);
+      // console.log(store.current_earthquake);
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
@@ -238,6 +238,7 @@ const calculatedUrl = computed(() => {
 
 const closePopup = () => {
   currentEarthquake.value = null;
+  currentEarthquakeId.value = null;
   const popup = document.getElementById('popup');
   if (popup) {
     popup.style.display = 'none';

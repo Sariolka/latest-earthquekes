@@ -22,6 +22,7 @@ const selectEarthquake = (id: string) => {
       :earthquake="earthquake"
       :is-active="store.current_earthquake === earthquake.id"
       @click="selectEarthquake(earthquake.id)"
+      :data-id="earthquake.id"
     />
   </ul>
 </template>
@@ -33,7 +34,6 @@ const selectEarthquake = (id: string) => {
   height: 100vh;
   overflow-y: auto;
   list-style: none;
-  //border-radius: 4px;
   scrollbar-gutter: stable;
 }
 </style>
