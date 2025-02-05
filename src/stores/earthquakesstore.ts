@@ -106,7 +106,7 @@ export const useEarthquakesStore = () => {
     store
       .fetchData('month', 'significant')
       .then(() => console.log('Загрузка данных с сервера завершена'));
-    console.log('1', store);
+    // console.log('1', store);
   }
   return store;
 };
