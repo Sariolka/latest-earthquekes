@@ -68,7 +68,6 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
           coordinates: item.geometry.coordinates.slice(0, 2),
           tsunami: item.properties.tsunami,
           hypocenter: item.geometry.coordinates[2],
-          title: item.properties.title,
           url: item.properties.url
         } as Earthquake;
       });

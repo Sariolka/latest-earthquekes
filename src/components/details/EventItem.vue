@@ -40,14 +40,14 @@ const calculatedTime = computed(() => {
 .event-item {
   display: flex;
   flex-direction: column;
+  width: 280px;
   transition: background-color 0.2s;
   background-color: #fff;
   border-block-end: solid 1px #ebebeb;
   padding: 5px;
   gap: 10px;
   list-style: none;
-  width: 100%;
-  //border-radius: 0;
+  max-width: 100%;
 
   &_active {
     background: #e9f1f8;
@@ -55,14 +55,7 @@ const calculatedTime = computed(() => {
     pointer-events: none;
   }
 
-  //&:first-child {
-  //  border-radius: 4px 4px 0 0;
-  //}
-  //
-
   &:last-child {
-    //border: none;
-    //border-radius: 0 0 4px 4px;
     padding-bottom: 1px;
   }
 

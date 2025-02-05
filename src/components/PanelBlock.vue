@@ -85,12 +85,12 @@ const fetchData = async () => {
           Significant
         </label>
       </fieldset>
-      <button class="button is-small panel-block__btn" type="submit">OK</button>
+      <button class="button is-small panel-block__btn" type="submit">Search</button>
     </form>
     <input
       class="input is-small panel-block__input"
       type="text"
-      placeholder="Search..."
+      placeholder="Filter..."
       v-model="inputValue"
     />
     <PreloaderItem v-if="isLoading" />
@@ -147,6 +147,7 @@ const fetchData = async () => {
 
   &__form {
     margin-bottom: 10px;
+    width: calc(100% - 10px);
   }
 
   &__warning {
@@ -175,7 +176,7 @@ const fetchData = async () => {
   }
 
   &__btn {
-    width: calc(100% - 10px);
+    width: 100%;
     outline: transparent;
   }
 }
