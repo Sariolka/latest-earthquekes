@@ -38,10 +38,14 @@ const selectedFeature = computed(() => {
 });
 
 const styleCache = {};
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 const styleFunction = function (feature) {
   const earthquake = feature.get('earthquake');
   const magnitude = earthquake.magnitude;
-  const radius = 3 + 1.5 * (magnitude - 1);
+  const radius = 3 + (magnitude * 2) / 3;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   let style = styleCache[radius];
   if (!style) {
     style = new Style({
@@ -56,6 +60,8 @@ const styleFunction = function (feature) {
         })
       })
     });
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     styleCache[radius] = style;
   }
   return style;
@@ -63,6 +69,8 @@ const styleFunction = function (feature) {
 
 const vectorSource = ref(new VectorSource());
 const vectorLayer = new VectorLayer({
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   source: vectorSource.value,
   style: styleFunction
 });
@@ -78,6 +86,8 @@ const rasterLayer = new TileLayer({
 
 useGeographic();
 
+const overlay = ref(null);
+
 onMounted(() => {
   const map = new Map({
     target: 'map',
@@ -89,13 +99,18 @@ onMounted(() => {
   });
 
   const popup = document.getElementById('popup');
-  const overlay = new Overlay({
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  overlay.value = new Overlay({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     element: popup,
     positioning: 'bottom-center',
-    offset: [0, -4]
+    offset: [0, -9]
   });
-
-  map.addOverlay(overlay);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  map.addOverlay(overlay.value);
 
   map.on('click', function (evt) {
     const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
@@ -104,14 +119,18 @@ onMounted(() => {
     if (!feature) {
       return;
     }
-    overlay.setPosition(evt.coordinate);
-    console.log(evt.coordinate, Array.from(feature.get('earthquake').coordinates));
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    overlay.value.setPosition(evt.coordinate);
+    // console.log(evt.coordinate, Array.from(feature.get('earthquake').coordinates));
     currentEarthquake.value = feature.get('earthquake');
     if (currentEarthquake.value) {
       currentEarthquakeId.value = currentEarthquake.value.id;
       store.setCurrentEarthquake(currentEarthquake.value.id);
       console.log(store.current_earthquake);
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     popup.style.display = 'block';
   });
 
@@ -129,22 +148,35 @@ watch(
   { immediate: true }
 );
 
+const openPopup = (earthquake: Earthquake) => {
+  if (earthquake) {
+    currentEarthquake.value = earthquake;
+    currentEarthquakeId.value = earthquake.id;
+    const popup = document.getElementById('popup');
+    const coordinates = earthquake.coordinates;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    overlay.value.setPosition(coordinates);
+    if (popup) {
+      popup.style.display = 'block';
+    }
+  }
+};
+
+watch(
+  () => store.current_earthquake,
+  (newId) => {
+    const earthquake = store.earthquakes_array.find((eq) => eq.id === newId);
+
+    if (earthquake) {
+      openPopup(earthquake);
+    }
+  }
+);
+
 watch(
   () => currentEarthquakeId.value,
-  (newValue, oldValue) => {
-    // const popup = document.getElementById('popup');
-    // const overlay = new Overlay({
-    //   element: popup,
-    //   positioning: 'bottom-center',
-    //   offset: [0, -4]
-    // });
-    // const coordinates = store.earthquakes_array.map((earthquake) => {
-    //   if(earthquake.id === newValue) {
-    //     return earthquake.coordinates
-    //   }
-    // })
-    // overlay.setPosition(coordinates);
-    // popup.style.display = 'block';
+  () => {
     updateStyle();
   }
 );
@@ -158,7 +190,7 @@ const highlightStyle = function (feature: Feature) {
     image: new CircleStyle({
       radius: radius + 1,
       fill: new Fill({
-        color: '#3949ab'
+        color: '#ad1457'
       })
     })
   });
@@ -194,7 +226,14 @@ const calculatedDepth = computed(() => {
 });
 
 const calculatedMag = computed(() => {
-  return Math.round(currentEarthquake.value.magnitude * 10) / 10;
+  if (currentEarthquake.value) {
+    return Math.round(currentEarthquake.value.magnitude * 10) / 10;
+  }
+  return 0;
+});
+
+const calculatedUrl = computed(() => {
+  return currentEarthquake.value ? currentEarthquake.value.url : '';
 });
 
 const closePopup = () => {
@@ -219,6 +258,7 @@ const closePopup = () => {
               {{ currentEarthquake && currentEarthquake.place }}
             </h4>
             <p class="map__popup-date">{{ calculatedTime }}</p>
+            <a :href="calculatedUrl" target="_blank" class="map__popup-link">Show more</a>
           </div>
 
           <div class="map__popup-table">
@@ -278,12 +318,14 @@ const closePopup = () => {
   width: calc(100% - 300px);
   background-color: #04041b;
 }
+
 .map {
   &__popup-header {
     display: flex;
     align-items: center;
     justify-content: end;
   }
+
   &__popup {
     background-color: #fff;
     border-radius: 4px;
@@ -312,6 +354,7 @@ const closePopup = () => {
     height: 20px;
     cursor: pointer;
   }
+
   &__popup-title {
     font-family: 'Montserrat', sans-serif;
     margin-bottom: 0;
@@ -353,7 +396,6 @@ const closePopup = () => {
     text-align: left;
     color: #2c3e50;
     font-style: italic;
-    margin-bottom: 20px;
   }
 
   &__popup-table {
@@ -388,6 +430,15 @@ const closePopup = () => {
     display: flex;
     flex-direction: column;
     align-items: start;
+    margin-bottom: 20px;
+    gap: 4px;
+  }
+
+  &__popup-link {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: normal;
   }
 }
 </style>

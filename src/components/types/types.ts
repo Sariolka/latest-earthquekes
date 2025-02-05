@@ -68,4 +68,5 @@ export interface Earthquake {
   tsunami: number;
   title: string;
   hypocenter: number;
+  url: string;
 }
