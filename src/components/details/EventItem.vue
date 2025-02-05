@@ -47,7 +47,7 @@ const calculatedTime = computed(() => {
   gap: 10px;
   list-style: none;
   width: 100%;
-  border-radius: 0;
+  //border-radius: 0;
 
   &_active {
     background: #e9f1f8;
@@ -55,13 +55,13 @@ const calculatedTime = computed(() => {
     pointer-events: none;
   }
 
-  &:first-child {
-    border-radius: 4px 4px 0 0;
-  }
-
+  //&:first-child {
+  //  border-radius: 4px 4px 0 0;
+  //}
+  //
   &:last-child {
-    border: none;
-    border-radius: 0 0 4px 4px;
+    //border: none;
+    //border-radius: 0 0 4px 4px;
     padding-bottom: 1px;
   }
 
