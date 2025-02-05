@@ -33,7 +33,7 @@ const selectEarthquake = (id: string) => {
   height: 100vh;
   overflow-y: auto;
   list-style: none;
-  border-radius: 4px;
+  //border-radius: 4px;
   scrollbar-gutter: stable;
 }
 </style>
