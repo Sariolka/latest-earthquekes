@@ -31,9 +31,12 @@ const selectEarthquake = (id: string) => {
 .events-list {
   display: flex;
   flex-direction: column;
+  align-items: center;
   height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
   list-style: none;
+  width: 100%;
   scrollbar-gutter: stable;
 }
 </style>
