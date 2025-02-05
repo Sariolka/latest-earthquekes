@@ -59,6 +59,7 @@ const calculatedTime = computed(() => {
   //  border-radius: 4px 4px 0 0;
   //}
   //
+
   &:last-child {
     //border: none;
     //border-radius: 0 0 4px 4px;
