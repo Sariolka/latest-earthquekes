@@ -31,6 +31,8 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
     },
     pullFromLocalStorage() {
       try {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         return JSON.parse(sessionStorage.getItem('earthquake'));
       } catch (e) {
         console.error(e);
@@ -55,6 +57,8 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
         this.loadFinished(false);
         return;
       }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       this.earthquakes_array = data.features.map((item) => {
         return {
           id: item.id,
@@ -63,7 +67,9 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
           magnitude: item.properties.mag,
           coordinates: item.geometry.coordinates.slice(0, 2),
           tsunami: item.properties.tsunami,
-          hypocenter: item.geometry.coordinates[2]
+          hypocenter: item.geometry.coordinates[2],
+          title: item.properties.title,
+          url: item.properties.url
         } as Earthquake;
       });
       this.pushToLocalStorage();
@@ -81,6 +87,8 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
       this.is_failed = !success;
 
       for (const callback of this.on_loaded) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         callback(success);
       }
     }

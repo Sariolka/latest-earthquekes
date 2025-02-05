@@ -3,12 +3,27 @@ import { computed, ref } from 'vue';
 import EventsList from '@/components/details/EventsList.vue';
 import { useEarthquakesStore } from '@/stores/earthquakesstore.ts';
 import PreloaderItem from '@/components/details/PreloaderItem.vue';
+import type { Earthquake } from '@/components/types/types.ts';
 
 const store = useEarthquakesStore();
 const isLoading = ref(false);
+const inputValue = ref('');
 
 const period = ref<'hour' | 'day' | 'week' | 'month'>('month');
 const magnitude = ref<'all' | '1.0' | '2.5' | '4.5' | 'significant'>('significant');
+
+const fetchedEarthquakes = computed(() => {
+  return store.earthquakes_array as Earthquake[];
+});
+
+const filteredEarthquakes = computed(() => {
+  if (inputValue.value) {
+    return fetchedEarthquakes.value.filter((earthquake) =>
+      earthquake.place.toLowerCase().includes(inputValue.value.toLowerCase())
+    );
+  }
+  return fetchedEarthquakes.value;
+});
 
 const fetchData = async () => {
   if (isLoading.value) {
@@ -17,7 +32,6 @@ const fetchData = async () => {
   isLoading.value = true;
   try {
     await store.fetchData(period.value, magnitude.value);
-    console.log(store.earthquakes_array);
   } catch (error) {
     console.log(error);
   } finally {
@@ -71,13 +85,22 @@ const fetchData = async () => {
           Significant
         </label>
       </fieldset>
-      <button class="button is-small" type="submit">OK</button>
+      <button class="button is-small panel-block__btn" type="submit">OK</button>
     </form>
+    <input
+      class="input is-small panel-block__input"
+      type="text"
+      placeholder="Search..."
+      v-model="inputValue"
+    />
     <PreloaderItem v-if="isLoading" />
     <p class="panel-block__warning" v-if="!isLoading && !store.earthquakes_array.length">
       Nothing found
     </p>
-    <EventsList v-else />
+    <EventsList
+      :earthquakes="filteredEarthquakes"
+      v-if="!isLoading && store.earthquakes_array.length"
+    />
   </div>
 </template>
 
@@ -134,6 +157,26 @@ const fetchData = async () => {
     line-height: normal;
     margin-top: 100px;
     align-self: center;
+  }
+
+  &__input {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 10px;
+    width: calc(100% - 10px);
+    outline: transparent;
+    border-color: #e9f1f8;
+
+    &:focus {
+      border-color: #e9f1f8;
+    }
+  }
+
+  &__btn {
+    width: calc(100% - 10px);
+    outline: transparent;
   }
 }
 </style>

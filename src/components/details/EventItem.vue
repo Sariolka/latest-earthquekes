@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import type { Earthquake } from '@/components/types/types.ts';
 import MagnitudeItem from '@/components/details/MagnitudeItem.vue';
 import { formatDate } from '@/components/helpers/dateFormatter.ts';
@@ -54,6 +54,7 @@ const calculatedTime = computed(() => {
     cursor: default;
     pointer-events: none;
   }
+
   &:first-child {
     border-radius: 4px 4px 0 0;
   }
@@ -97,7 +98,7 @@ const calculatedTime = computed(() => {
   &__hypocenter {
     margin-bottom: 0;
     font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     line-height: normal;
     white-space: nowrap;
@@ -113,6 +114,7 @@ const calculatedTime = computed(() => {
     padding: 3px 6px;
     color: #2c3e50;
     font-style: italic;
+    white-space: nowrap;
   }
 }
 </style>
