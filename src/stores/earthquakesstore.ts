@@ -15,7 +15,7 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
     received_at: null,
     current_earthquake: ''
   }),
-  actions: {
+  actions: {  //Сохранение в локальном хранилище
     pushToLocalStorage() {
       try {
         sessionStorage.setItem(
@@ -28,7 +28,7 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
       } catch (e) {
         console.error(e);
       }
-    },
+    }, //Извлечение из локального хранилища
     pullFromLocalStorage() {
       try {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
