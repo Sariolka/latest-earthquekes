@@ -12,10 +12,12 @@ const inputValue = ref('');
 const period = ref<'hour' | 'day' | 'week' | 'month'>('month');
 const magnitude = ref<'all' | '1.0' | '2.5' | '4.5' | 'significant'>('significant');
 
+//Данные из хранилища
 const fetchedEarthquakes = computed(() => {
   return store.earthquakes_array as Earthquake[];
 });
 
+//Фильтрация списка по названию
 const filteredEarthquakes = computed(() => {
   if (inputValue.value) {
     return fetchedEarthquakes.value.filter((earthquake) =>
@@ -25,6 +27,7 @@ const filteredEarthquakes = computed(() => {
   return fetchedEarthquakes.value;
 });
 
+//Поиск по выбранным данным
 const fetchData = async () => {
   if (isLoading.value) {
     return;

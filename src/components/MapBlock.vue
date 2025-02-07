@@ -21,6 +21,7 @@ const store = useEarthquakesStore();
 const currentEarthquake = ref<Earthquake | null>(null);
 const currentEarthquakeId = ref<string | null>(null);
 
+//Создание новых точек, используя данные с сервера
 const renderedData = computed(() => {
   return store.earthquakes_array.map((earthquake) => {
     return new Feature({
@@ -30,6 +31,7 @@ const renderedData = computed(() => {
   });
 });
 
+//Выбранная точка
 const selectedFeature = computed(() => {
   if (!currentEarthquakeId.value || currentEarthquakeId.value === null) return null;
   return vectorSource.value
@@ -37,6 +39,7 @@ const selectedFeature = computed(() => {
     .find((feature) => feature.get('earthquake').id === currentEarthquakeId.value);
 });
 
+//Стили для точек
 const styleCache = {};
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -67,6 +70,7 @@ const styleFunction = function (feature) {
   return style;
 };
 
+//Создание векторного слоя
 const vectorSource = ref(new VectorSource());
 const vectorLayer = new VectorLayer({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -75,6 +79,7 @@ const vectorLayer = new VectorLayer({
   style: styleFunction
 });
 
+//Загрузка растрового тайла
 const rasterLayer = new TileLayer({
   source: new OGCMapTile({
     url: 'https://maps.gnosis.earth/ogcapi/collections/NaturalEarth:raster:HYP_HR_SR_OB_DR/map/tiles/WebMercatorQuad',
@@ -88,6 +93,7 @@ useGeographic();
 
 const overlay = ref(null);
 
+//Первоначальная загрузка страницы
 onMounted(() => {
   const map = new Map({
     target: 'map',
@@ -98,6 +104,7 @@ onMounted(() => {
     })
   });
 
+  //Создание модального окна
   const popup = document.getElementById('popup');
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
@@ -108,10 +115,12 @@ onMounted(() => {
     positioning: 'bottom-center',
     offset: [0, -9]
   });
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   map.addOverlay(overlay.value);
 
+  //Слушатель на карту для модального окна
   map.on('click', function (evt) {
     const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
       return feature;
@@ -134,11 +143,13 @@ onMounted(() => {
     popup.style.display = 'block';
   });
 
+  //Изменение курсора для точки
   map.on('pointermove', function (event) {
     map.getViewport().style.cursor = map.hasFeatureAtPixel(event.pixel) ? 'pointer' : 'inherit';
   });
 });
 
+//Отслеживание получения новых данных с сервера
 watch(
   renderedData,
   (newFeatures) => {
@@ -148,6 +159,7 @@ watch(
   { immediate: true }
 );
 
+//Открытие модального окна
 const openPopup = (earthquake: Earthquake) => {
   if (earthquake) {
     currentEarthquake.value = earthquake;
@@ -163,6 +175,7 @@ const openPopup = (earthquake: Earthquake) => {
   }
 };
 
+//отслеживание и открытие модального попапа, если кликнут элемент в списке
 watch(
   () => store.current_earthquake,
   (newId) => {
@@ -174,6 +187,7 @@ watch(
   }
 );
 
+//Слушатель на изменение стиля точки при клике
 watch(
   () => currentEarthquakeId.value,
   () => {
@@ -181,6 +195,7 @@ watch(
   }
 );
 
+//Изменение стиля точки при клике
 const highlightStyle = function (feature: Feature) {
   const earthquake = feature.get('earthquake');
   const magnitude = earthquake.magnitude;
@@ -204,6 +219,7 @@ function updateStyle() {
   });
 }
 
+//Вычисления времени/координат/глубины/магнитуды/url
 const calculatedTime = computed(() => {
   if (currentEarthquake.value) {
     return formatDate(currentEarthquake.value.time);
@@ -236,6 +252,7 @@ const calculatedUrl = computed(() => {
   return currentEarthquake.value ? currentEarthquake.value.url : '';
 });
 
+//Закрытие попапа
 const closePopup = () => {
   currentEarthquake.value = null;
   currentEarthquakeId.value = null;
