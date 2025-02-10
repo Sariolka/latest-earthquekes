@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Earthquake } from '@/components/types/types.ts';
+import type { Earthquake } from '@/types/types.ts';
 
 export const fetchEarthquakes = async (period: string, magnitude: string): Promise<any> => {
   try {

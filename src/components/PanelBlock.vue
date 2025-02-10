@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import EventsList from '@/components/details/EventsList.vue';
 import { useEarthquakesStore } from '@/stores/earthquakesstore.ts';
 import PreloaderItem from '@/components/details/PreloaderItem.vue';
-import type { Earthquake } from '@/components/types/types.ts';
+import type { Earthquake } from '@/types/types.ts';
 
 const store = useEarthquakesStore();
 const isLoading = ref(false);
@@ -108,6 +108,9 @@ const fetchData = async () => {
 </template>
 
 <style scoped lang="scss">
+@use '@/assets/constants.scss';
+@use '@/assets/mixins.scss';
+
 .panel-block {
   display: flex;
   flex-direction: column;
@@ -129,22 +132,16 @@ const fetchData = async () => {
   }
 
   &__radio {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
+    @include mixins.base-typography(12px, normal, 400);
     color: #ebebeb;
-    line-height: normal;
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
   &__title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
+    @include mixins.base-typography(16px, normal, 600);
     color: #fff;
-    line-height: normal;
     margin-bottom: 10px;
   }
 
@@ -154,20 +151,14 @@ const fetchData = async () => {
   }
 
   &__warning {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
+    @include mixins.base-typography(16px, normal, 400);
     color: #fff;
-    line-height: normal;
     margin-top: 100px;
     align-self: center;
   }
 
   &__input {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: normal;
+    @include mixins.base-typography(14px, normal, 400);
     margin-bottom: 10px;
     width: calc(100% - 10px);
     outline: transparent;

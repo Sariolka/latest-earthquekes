@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { Earthquake } from '@/components/types/types.ts';
+import type { Earthquake } from '@/types/types.ts';
 import MagnitudeItem from '@/components/details/MagnitudeItem.vue';
-import { formatDate } from '@/components/helpers/dateFormatter.ts';
-import { formatDepth } from '@/components/helpers/depthFormatter.ts';
+import { formatDate } from '@/helpers/dateFormatter.ts';
+import { formatDepth } from '@/helpers/depthFormatter.ts';
 
 const props = defineProps<{
   earthquake: Earthquake;
@@ -37,6 +37,9 @@ const calculatedTime = computed(() => {
 </template>
 
 <style scoped lang="scss">
+@use '@/assets/constants.scss';
+@use '@/assets/mixins.scss';
+
 .event-item {
   display: flex;
   flex-direction: column;
@@ -78,32 +81,23 @@ const calculatedTime = computed(() => {
   }
 
   &__title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
+    @include mixins.base-typography(14px, normal, 600);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     flex-grow: 1;
     margin-bottom: 0;
-    line-height: normal;
   }
 
   &__hypocenter {
+    @include mixins.base-typography(13px, normal, 600);
     margin-bottom: 0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    line-height: normal;
     white-space: nowrap;
   }
 
   &__date {
-    font-family: 'Montserrat', sans-serif;
+    @include mixins.base-typography(13px, 16px, 400);
     margin-bottom: 0;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 16px;
     text-align: left;
     padding: 3px 6px;
     color: #2c3e50;

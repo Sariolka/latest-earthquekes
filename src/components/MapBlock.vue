@@ -10,10 +10,10 @@ import { Fill, Stroke, Style } from 'ol/style';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import { useEarthquakesStore } from '@/stores/earthquakesstore.ts';
-import type { Earthquake } from '@/components/types/types.ts';
-import { formatDate } from '@/components/helpers/dateFormatter.ts';
-import { formatCoordinates } from '@/components/helpers/coordinatesFormatted.ts';
-import { formatDepth } from '@/components/helpers/depthFormatter.ts';
+import type { Earthquake } from '@/types/types.ts';
+import { formatDate } from '@/helpers/dateFormatter.ts';
+import { formatCoordinates } from '@/helpers/coordinatesFormatted.ts';
+import { formatDepth } from '@/helpers/depthFormatter.ts';
 import CircleStyle from 'ol/style/Circle';
 
 const store = useEarthquakesStore();
@@ -328,6 +328,9 @@ const closePopup = () => {
 </template>
 
 <style scoped lang="scss">
+@use '@/assets/constants.scss';
+@use '@/assets/mixins.scss';
+
 #map {
   position: absolute;
   top: 0;
@@ -362,7 +365,7 @@ const closePopup = () => {
   }
 
   &__close-btn {
-    background-image: url('@/components/icons/close.svg');
+    background-image: url('@/icons/close.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -374,11 +377,8 @@ const closePopup = () => {
   }
 
   &__popup-title {
-    font-family: 'Montserrat', sans-serif;
+    @include mixins.base-typography(16px, normal, 500);
     margin-bottom: 0;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: normal;
     max-width: 220px;
   }
 
@@ -391,26 +391,23 @@ const closePopup = () => {
   }
 
   &__icon-tsunami {
-    background-image: url('@/components/icons/tsunami.svg');
+    background-image: url('@/icons/tsunami.svg');
   }
 
   &__icon-magnitude {
-    background-image: url('@/components/icons/activity.svg');
+    background-image: url('@/icons/activity.svg');
   }
 
   &__icon-hypocenter {
-    background-image: url('@/components/icons/depth.svg');
+    background-image: url('@/icons/depth.svg');
   }
 
   &__icon-earth {
-    background-image: url('@/components/icons/globe.svg');
+    background-image: url('@/icons/globe.svg');
   }
 
   &__popup-date {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 16px;
+    @include mixins.base-typography(13px, 16x, 400);
     text-align: left;
     color: #2c3e50;
     font-style: italic;
@@ -435,12 +432,9 @@ const closePopup = () => {
   }
 
   &__popup-th {
+    @include mixins.base-typography(14px, normal, 400);
     display: table-cell;
     padding: 4px 10px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: normal;
     text-align: end;
   }
 
@@ -453,10 +447,7 @@ const closePopup = () => {
   }
 
   &__popup-link {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: normal;
+    @include mixins.base-typography(14px, normal, 400);
   }
 }
 </style>
