@@ -1,5 +1,5 @@
 @import './normalize.css';
-@import '@/components/fonts/fonts.css';
+@import '@/fonts/fonts.css';
 @import './base.css';
 @import 'styles.scss';
 

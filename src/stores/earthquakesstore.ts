@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import type { Earthquake } from '@/components/types/types.ts';
-import { fetchEarthquakes } from '@/components/api/api.ts';
+import type { Earthquake } from '@/types/types.ts';
+import { fetchEarthquakes } from '@/api/api.ts';
 
 const CACHE_TIME = 120;
 
@@ -50,6 +50,7 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
         data = this.pullFromLocalStorage();
         if (!data?.received_at || data.received_at + CACHE_TIME < Date.now()) {
           data = await fetchEarthquakes(period, magnitude);
+          // console.log(data)
           data.received_at = Date.now();
         }
       } catch (e) {
@@ -59,6 +60,7 @@ export const useEarthquakesStoreI = defineStore('earthquake', {
       }
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
+
       this.earthquakes_array = data.features.map((item) => {
         return {
           id: item.id,

@@ -6,8 +6,8 @@
   font-display: swap;
   src:
     local('Montserrat-Regular'),
-    url('../fonts/Montserrat-Regular.woff2') format('woff2'),
-    url('../fonts/Montserrat-Regular.woff') format('woff');
+    url('at-Regular.woff2') format('woff2'),
+    url('at-Regular.woff') format('woff');
 }
 
 /* Montserrat 500 */
@@ -18,8 +18,8 @@
   font-display: swap;
   src:
     local('Montserrat-Medium'),
-    url('../fonts/Montserrat-Medium.woff2') format('woff2'),
-    url('../fonts/Montserrat-Medium.woff') format('woff');
+    url('Montserrat-Medium.woff2') format('woff2'),
+    url('Montserrat-Medium.woff') format('woff');
 }
 
 /* Montserrat 600 */
@@ -30,8 +30,8 @@
   font-display: swap;
   src:
     local('Montserrat-SemiBold'),
-    url('../fonts/Montserrat-SemiBold.woff2') format('woff2'),
-    url('../fonts/Montserrat-SemiBold.woff') format('woff');
+    url('Montserrat-SemiBold.woff2') format('woff2'),
+    url('Montserrat-SemiBold.woff') format('woff');
 }
 
 /* Montserrat 700 */
@@ -42,5 +42,5 @@
   font-display: swap;
   src:
     local('Montserrat-Bold'),
-    url('../fonts/Montserrat-Bold.woff') format('woff');
+    url('Montserrat-Bold.woff') format('woff');
 }
