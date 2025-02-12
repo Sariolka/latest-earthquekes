@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue';
 import TileLayer from 'ol/layer/Tile';
 import { OGCMapTile } from 'ol/source';
 import { Feature, Overlay, View } from 'ol';
 import Map from 'ol/Map.js';
-import { computed, onMounted, ref, watch } from 'vue';
 import { useGeographic } from 'ol/proj';
 import { Point } from 'ol/geom';
 import { Fill, Stroke, Style } from 'ol/style';
@@ -33,7 +33,7 @@ const renderedData = computed(() => {
 
 //Выбранная точка
 const selectedFeature = computed(() => {
-  if (!currentEarthquakeId.value || currentEarthquakeId.value === null) return null;
+  if (!currentEarthquakeId.value) return null;
   return vectorSource.value
     .getFeatures()
     .find((feature) => feature.get('earthquake').id === currentEarthquakeId.value);

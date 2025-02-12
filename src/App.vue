@@ -1,18 +1,11 @@
 <script setup lang="ts">
-import MapBlock from '@/components/MapBlock.vue';
-import PanelBlock from '@/components/PanelBlock.vue';
+import MainPage from '@/views/MainPage.vue';
 </script>
 
 <template>
-  <main class="main">
-    <PanelBlock />
-    <MapBlock />
-  </main>
+<MainPage />
 </template>
 
 <style scoped>
-.main {
-  display: flex;
-  height: 100vh;
-}
+
 </style>
