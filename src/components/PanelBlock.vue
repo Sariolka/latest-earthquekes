@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import EventsList from '@/components/details/EventsList.vue';
-import { useEarthquakesStore } from '@/stores/earthquakesstore.ts';
-import PreloaderItem from '@/components/details/PreloaderItem.vue';
 import type { Earthquake } from '@/types/types.ts';
+import EventsList from '@/components/EventsList.vue';
+import { useEarthquakesStore } from '@/stores/earthquakesstore.ts';
+import PreloaderItem from '@/components/PreloaderItem.vue';
 
 const store = useEarthquakesStore();
 const isLoading = ref(false);

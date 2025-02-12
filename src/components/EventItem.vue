@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { Earthquake } from '@/types/types.ts';
-import MagnitudeItem from '@/components/details/MagnitudeItem.vue';
 import { formatDate } from '@/helpers/dateFormatter.ts';
 import { formatDepth } from '@/helpers/depthFormatter.ts';
+import type { Earthquake } from '@/types/types.ts';
+import MagnitudeItem from '@/components/MagnitudeItem.vue';
 
 const props = defineProps<{
   earthquake: Earthquake;
@@ -37,8 +37,8 @@ const calculatedTime = computed(() => {
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/constants.scss';
-@use '@/assets/mixins.scss';
+@use '@/assets/constants';
+@use '@/assets/mixins';
 
 .event-item {
   display: flex;

@@ -25,8 +25,8 @@ const magnitudeClasses = computed(() => {
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/constants.scss';
-@use '@/assets/mixins.scss';
+@use '@/assets/constants';
+@use '@/assets/mixins';
 
 .magnitude {
   @include mixins.base-typography(14px, normal, 600);

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import EventItem from '@/components/details/EventItem.vue';
-import type { Earthquake } from '@/types/types.ts';
 import { useEarthquakesStore } from '@/stores/earthquakesstore.ts';
+import EventItem from '@/components/EventItem.vue';
+import type { Earthquake } from '@/types/types.ts';
 
 const props = defineProps<{
   earthquakes: Earthquake[];
