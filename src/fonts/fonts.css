@@ -6,8 +6,8 @@
   font-display: swap;
   src:
     local('Montserrat-Regular'),
-    url('at-Regular.woff2') format('woff2'),
-    url('at-Regular.woff') format('woff');
+    url('Montserrat-Regular.woff2') format('woff2'),
+    url('Montserrat-Regular.woff') format('woff');
 }
 
 /* Montserrat 500 */
